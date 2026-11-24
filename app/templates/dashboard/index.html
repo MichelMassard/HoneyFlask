@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Dashboard honeypot</h1>
+<p>Tentativi registrati: <strong>{{ total }}</strong></p>
+
+{% if pwned_pct is not none %}
+<p>Password già presenti in data breach (Have I Been Pwned):
+    <strong>{{ pwned_pct }}%</strong> su {{ checked }} controllate</p>
+{% else %}
+<p>Controllo Have I Been Pwned non ancora fatto: lancia <code>flask check-pwned</code>.</p>
+{% endif %}
+
+<div class="stats">
+    <div>
+        <h3>Username più provati</h3>
+        <table>
+            {% for valore, n in top_usernames %}
+            <tr><td>{{ valore }}</td><td>{{ n }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div>
+        <h3>Password più provate</h3>
+        <table>
+            {% for valore, n in top_passwords %}
+            <tr><td>{{ valore }}</td><td>{{ n }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div>
+        <h3>IP più attivi</h3>
+        <table>
+            {% for valore, n in top_ips %}
+            <tr><td>{{ valore }}</td><td>{{ n }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<h3>Tentativi per giorno</h3>
+<table>
+    {% for giorno, n in per_day %}
+    <tr><td>{{ giorno.strftime('%d.%m.%Y') }}</td><td>{{ n }}</td></tr>
+    {% endfor %}
+</table>
+
+<h3>Ultimi tentativi</h3>
+{% if current_user.is_admin %}
+<p><a href="{{ url_for('dashboard.export_csv') }}">Esporta CSV</a></p>
+{% endif %}
+
+<form method="get" class="filter">
+    <input type="text" name="ip" value="{{ ip }}" placeholder="Filtra per IP">
+    <button type="submit">Filtra</button>
+</form>
+
+<table>
+    <tr><th>Data</th><th>IP</th><th>Username</th><th>Password</th><th>Breach (password)</th></tr>
+    {% for a in latest %}
+    <tr>
+        <td>{{ a.created_at.strftime('%d.%m.%Y %H:%M:%S') }}</td>
+        <td>{{ a.ip }}</td>
+        <td>{{ a.username }}</td>
+        <td>{{ a.password }}</td>
+        <td>{% if a.pwned_count is none %}-{% else %}{{ a.pwned_count }}{% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

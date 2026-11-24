@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    <title>Accesso amministratore</title>
+    <style>
+        body { font-family: sans-serif; background: #f1f1f1; }
+        form { width: 300px; margin: 8rem auto; padding: 1.5rem; background: white; }
+        input { width: 100%; margin: 0.3rem 0 1rem; padding: 0.4rem; box-sizing: border-box; }
+        .error { color: #b32d2e; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <form method="post">
+        <h2>Accesso</h2>
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <label>Nome utente</label>
+        <input type="text" name="username" autofocus>
+        <label>Password</label>
+        <input type="password" name="password">
+        <button type="submit">Accedi</button>
+    </form>
+</body>
+</html>

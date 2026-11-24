@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Blocklist{% endblock %}
+
+{% block content %}
+<h1>Blocklist</h1>
+<p>Gli IP in questa lista ricevono un errore 403 dall'honeypot.</p>
+
+<form method="post" class="filter">
+    <input type="text" name="ip" placeholder="Indirizzo IP" required>
+    <input type="text" name="reason" placeholder="Motivo (facoltativo)">
+    <button type="submit">Blocca</button>
+</form>
+
+<table>
+    <tr><th>IP</th><th>Motivo</th><th>Data</th><th></th></tr>
+    {% for b in blocked %}
+    <tr>
+        <td>{{ b.ip }}</td>
+        <td>{{ b.reason }}</td>
+        <td>{{ b.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+        <td>
+            <form method="post" action="{{ url_for('dashboard.unblock', blocked_id=b.id) }}">
+                <button type="submit">Sblocca</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
