@@ -1,21 +1,16 @@
-# Ambiente virtuale
 .venv/
 venv/
 
-# Segreti e configurazione locale
 .env
 
-# Python
 __pycache__/
 *.pyc
 .pytest_cache/
 
-# Database locale
 instance/
 *.db
 *.sqlite3
 
-# Editor / sistema
 .idea/
 .vscode/
 .DS_Store
